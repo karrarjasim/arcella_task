@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LinkRequest;
 use App\Models\Link;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Boolean;
 
 class LinkController extends Controller
 {
-    public function store(Request $request) 
+    public function store(LinkRequest $request) 
     {
          Link::create([
             'title' => $request->title,

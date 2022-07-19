@@ -49,7 +49,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="link" class="form-label">Link</label>
-                                <input name="link" type="url" class="form-control" id="link" autocomplete="off"
+                                <input name="link" type="text" class="form-control" id="link" autocomplete="off"
                                     required>
                             </div>
                             <div class="mb-3 form-check">
@@ -105,3 +105,14 @@
         </div>
  </div>
 </template>
+
+<script>
+
+export default {
+   
+    created() {
+        this.csrfToken = document.querySelector("meta[name=\"csrf-token\"]").content;
+    },
+   
+}
+</script>
