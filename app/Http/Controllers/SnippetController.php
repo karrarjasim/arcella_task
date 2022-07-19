@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SnippetRequest;
 use App\Models\Snippet;
 use Illuminate\Http\Request;
 
 class SnippetController extends Controller
 {
-    public function store(Request $request) 
+    public function store(SnippetRequest $request) 
     {
          Snippet::create([
             'title' => $request->title,

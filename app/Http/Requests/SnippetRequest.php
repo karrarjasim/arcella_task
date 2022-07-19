@@ -4,14 +4,15 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LinkRequest extends FormRequest
+class SnippetRequest extends FormRequest
 {
-
+  
     public function rules()
     {
         return [
             'title' => 'required',
-            'link' => 'required|url',
+            'descreption' => 'required',
+            'snippet' => 'required',
         ];
     }
 }
