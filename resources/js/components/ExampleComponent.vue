@@ -70,7 +70,7 @@ export default {
             });
         },
         deleteResources(id) {
-            if (confirm("Are you sure to delete this category ?")) {
+            if (confirm("Are you sure to delete this resource ?")) {
                 axios.delete(`/api/resources/${id}`).then(response => {
                     this.getResources();
                 }).catch(error => {
