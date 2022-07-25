@@ -72,7 +72,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="snippetModalLabel">Add new link</h5>
+                        <h5 class="modal-title" id="snippetModalLabel">Add new Snippet</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="snippets" method="post">
