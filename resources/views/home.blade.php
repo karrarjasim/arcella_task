@@ -9,7 +9,7 @@
         @foreach (\App\Models\Resource::all() as $resource)
             @switch($resource->resourceable_type)
                 @case('App\Models\File')
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-3">
                         @component("components.file") 
                         @slot('title') {{ $resource->resourceable->title }} @endslot
                         @slot('link') {{ $resource->resourceable->link }} @endslot
@@ -19,7 +19,7 @@
                     @break
 
                     @case('App\Models\Link')
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-3">
                         @component("components.link")
                         @slot('title') {{ $resource->resourceable->title }} @endslot
                         @slot('link') {{ $resource->resourceable->link }} @endslot
@@ -30,7 +30,7 @@
                     @break
 
                     @case('App\Models\Snippet')
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-3">
                         @component("components.snippet")
                         @slot('title') {{ $resource->resourceable->title }} @endslot
                         @slot('description') {{ $resource->resourceable->description }} @endslot

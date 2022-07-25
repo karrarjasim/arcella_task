@@ -10,11 +10,16 @@ class SnippetController extends Controller
 {
     public function store(SnippetRequest $request) 
     {
-         Snippet::create([
+        $snippet =  Snippet::updateOrCreate(
+            [
+                'title' => $request->title,
+            ],
+            [
             'title' => $request->title,
             'descreption' => $request->descreption,
             'snippet' => $request->snippet
-        ])->resources()->create();
+        ]);
+        $snippet->resources()->updateOrCreate(['resourceable_id' => $snippet->id]);
 
         return back();
     }

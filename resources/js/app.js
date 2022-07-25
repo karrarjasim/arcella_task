@@ -8,6 +8,10 @@ require('./bootstrap');
 
 window.Vue = require('vue').default;
 import axios from 'axios';
+import Vue from 'vue';
+import * as bootstrap from 'bootstrap';
+window.bootstrap = bootstrap;
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -32,6 +36,7 @@ const app = new Vue({
     el: '#app',
 });
 
+export const bus = new Vue()
 
 
 var btns = document.getElementsByClassName("snippet");

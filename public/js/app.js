@@ -5322,11 +5322,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      resources: []
+      resources: {},
+      resource: {}
     };
   },
   created: function created() {
@@ -5336,7 +5339,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     this.getResources();
   },
   methods: {
-    getResources: function getResources() {
+    getResource: function getResource(id, modalType) {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -5345,11 +5348,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios.get("/api/resources").then(function (response) {
-                  _this.resources = response.data;
+                return axios.get("/api/resources/" + id).then(function (response) {
+                  _this.resource = response.data;
+
+                  switch (modalType) {
+                    case "File":
+                      _this.showModal('#exampleModal');
+
+                      break;
+
+                    case "Link":
+                      _this.showModal('#linkModal');
+
+                      break;
+
+                    case "Snippet":
+                      _this.showModal('#snippetModal');
+
+                      break;
+
+                    default:
+                      break;
+                  }
                 })["catch"](function (error) {
                   console.log(error);
-                  _this.resources = [];
+                  _this.resource = {};
                 });
 
               case 2:
@@ -5360,12 +5383,39 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
+    getResources: function getResources() {
+      var _arguments = arguments,
+          _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var page;
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                page = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : 1;
+                _context2.next = 3;
+                return axios.get("/api/resources?page=" + page).then(function (response) {
+                  _this2.resources = response.data;
+                })["catch"](function (error) {
+                  console.log(error);
+                  _this2.resources = [];
+                });
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
     deleteResources: function deleteResources(id) {
-      var _this2 = this;
+      var _this3 = this;
 
       if (confirm("Are you sure to delete this resource ?")) {
         axios["delete"]("/api/resources/".concat(id)).then(function (response) {
-          _this2.getResources();
+          _this3.getResources();
         })["catch"](function (error) {
           console.log(error);
         });
@@ -5375,6 +5425,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var rest = classString.substring(0, classString.lastIndexOf("\\") + 1);
       var last = classString.substring(classString.lastIndexOf("\\") + 1, classString.length);
       return last;
+    },
+    showModal: function showModal(id) {
+      new bootstrap.Modal(id).show();
     }
   },
   components: {
@@ -5504,8 +5557,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      isUpdate: true
+    };
+  },
+  props: {
+    form: {}
+  },
   created: function created() {
     this.csrfToken = document.querySelector("meta[name=\"csrf-token\"]").content;
+  },
+  watch: {
+    form: function form(newVal, oldVal) {
+      // watch it
+      this.isUpdate = false;
+    }
   }
 });
 
@@ -5519,8 +5586,13 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "bus": () => (/* binding */ bus)
+/* harmony export */ });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -5530,6 +5602,9 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js")["default"]);
 
+
+
+window.bootstrap = bootstrap__WEBPACK_IMPORTED_MODULE_1__;
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -5540,17 +5615,18 @@ window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('home-component', (__webpack_require__(/*! ./components/HomeComponent.vue */ "./resources/js/components/HomeComponent.vue")["default"]));
-Vue.component('add-modals', (__webpack_require__(/*! ./components/modals/AddModalComponent.vue */ "./resources/js/components/modals/AddModalComponent.vue")["default"]));
+vue__WEBPACK_IMPORTED_MODULE_2__["default"].component('home-component', (__webpack_require__(/*! ./components/HomeComponent.vue */ "./resources/js/components/HomeComponent.vue")["default"]));
+vue__WEBPACK_IMPORTED_MODULE_2__["default"].component('add-modals', (__webpack_require__(/*! ./components/modals/AddModalComponent.vue */ "./resources/js/components/modals/AddModalComponent.vue")["default"]));
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-var app = new Vue({
+var app = new vue__WEBPACK_IMPORTED_MODULE_2__["default"]({
   el: '#app'
 });
+var bus = new vue__WEBPACK_IMPORTED_MODULE_2__["default"]();
 var btns = document.getElementsByClassName("snippet");
 
 for (var i = 0; i < btns.length; i++) {
@@ -28235,9 +28311,23 @@ var render = function () {
                   ]),
                   _vm._v(" "),
                   _c("td", [
-                    _c("button", { staticClass: "btn btn-secondary btn-sm" }, [
-                      _vm._v("Edit"),
-                    ]),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary btn-sm",
+                        on: {
+                          click: function ($event) {
+                            _vm.getResource(
+                              resource.id,
+                              _vm.getTypeNameFromClass(
+                                resource.resourceable_type
+                              )
+                            )
+                          },
+                        },
+                      },
+                      [_vm._v("Edit")]
+                    ),
                     _vm._v(" "),
                     _c(
                       "button",
@@ -28261,7 +28351,7 @@ var render = function () {
         ]),
       ]),
       _vm._v(" "),
-      _c("add-modals"),
+      _c("add-modals", { attrs: { form: _vm.resource } }),
     ],
     1
   )
@@ -28410,12 +28500,46 @@ var render = function () {
                     domProps: { value: _vm.csrfToken },
                   }),
                   _vm._v(" "),
-                  _vm._m(1),
+                  _c("div", { staticClass: "mb-3" }, [
+                    _c(
+                      "label",
+                      { staticClass: "form-label", attrs: { for: "title" } },
+                      [_vm._v("Title")]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.form.title,
+                          expression: "form.title",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        name: "title",
+                        type: "text",
+                        id: "title",
+                        autocomplete: "off",
+                        required: "",
+                      },
+                      domProps: { value: _vm.form.title },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.form, "title", $event.target.value)
+                        },
+                      },
+                    }),
+                  ]),
                   _vm._v(" "),
-                  _vm._m(2),
+                  _vm._m(1),
                 ]),
                 _vm._v(" "),
-                _vm._m(3),
+                _vm._m(2),
               ]
             ),
           ]),
@@ -28437,7 +28561,7 @@ var render = function () {
       [
         _c("div", { staticClass: "modal-dialog" }, [
           _c("div", { staticClass: "modal-content" }, [
-            _vm._m(4),
+            _vm._m(3),
             _vm._v(" "),
             _c("form", { attrs: { action: "links", method: "post" } }, [
               _c("div", { staticClass: "modal-body" }, [
@@ -28446,14 +28570,82 @@ var render = function () {
                   domProps: { value: _vm.csrfToken },
                 }),
                 _vm._v(" "),
-                _vm._m(5),
+                _c("div", { staticClass: "mb-3" }, [
+                  _c(
+                    "label",
+                    { staticClass: "form-label", attrs: { for: "title" } },
+                    [_vm._v("Title")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.title,
+                        expression: "form.title",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      name: "title",
+                      type: "text",
+                      id: "title",
+                      autocomplete: "off",
+                      required: "",
+                    },
+                    domProps: { value: _vm.form.title },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "title", $event.target.value)
+                      },
+                    },
+                  }),
+                ]),
                 _vm._v(" "),
-                _vm._m(6),
+                _c("div", { staticClass: "mb-3" }, [
+                  _c(
+                    "label",
+                    { staticClass: "form-label", attrs: { for: "link" } },
+                    [_vm._v("Link")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.link,
+                        expression: "form.link",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      name: "link",
+                      type: "text",
+                      id: "link",
+                      autocomplete: "off",
+                      required: "",
+                    },
+                    domProps: { value: _vm.form.link },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "link", $event.target.value)
+                      },
+                    },
+                  }),
+                ]),
                 _vm._v(" "),
-                _vm._m(7),
+                _vm._m(4),
               ]),
               _vm._v(" "),
-              _vm._m(8),
+              _vm._m(5),
             ]),
           ]),
         ]),
@@ -28474,7 +28666,7 @@ var render = function () {
       [
         _c("div", { staticClass: "modal-dialog" }, [
           _c("div", { staticClass: "modal-content" }, [
-            _vm._m(9),
+            _vm._m(6),
             _vm._v(" "),
             _c("form", { attrs: { action: "snippets", method: "post" } }, [
               _c("div", { staticClass: "modal-body" }, [
@@ -28483,14 +28675,115 @@ var render = function () {
                   domProps: { value: _vm.csrfToken },
                 }),
                 _vm._v(" "),
-                _vm._m(10),
+                _c("div", { staticClass: "mb-3" }, [
+                  _c(
+                    "label",
+                    { staticClass: "form-label", attrs: { for: "title" } },
+                    [_vm._v("Title")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.title,
+                        expression: "form.title",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      name: "title",
+                      type: "text",
+                      id: "title",
+                      autocomplete: "off",
+                      required: "",
+                    },
+                    domProps: { value: _vm.form.title },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "title", $event.target.value)
+                      },
+                    },
+                  }),
+                ]),
                 _vm._v(" "),
-                _vm._m(11),
+                _c("div", { staticClass: "mb-3" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-label",
+                      attrs: { for: "descreption" },
+                    },
+                    [_vm._v("Descreption")]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.descreption,
+                        expression: "form.descreption",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      name: "descreption",
+                      "aria-label": "With textarea",
+                      required: "",
+                    },
+                    domProps: { value: _vm.form.descreption },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "descreption", $event.target.value)
+                      },
+                    },
+                  }),
+                ]),
                 _vm._v(" "),
-                _vm._m(12),
+                _c("div", { staticClass: "mb-3" }, [
+                  _c(
+                    "label",
+                    { staticClass: "form-label", attrs: { for: "snippet" } },
+                    [_vm._v("HTML Snippet")]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.snippet,
+                        expression: "form.snippet",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      name: "snippet",
+                      "aria-label": "With textarea",
+                      required: "",
+                    },
+                    domProps: { value: _vm.form.snippet },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "snippet", $event.target.value)
+                      },
+                    },
+                  }),
+                ]),
               ]),
               _vm._v(" "),
-              _vm._m(13),
+              _vm._m(7),
             ]),
           ]),
         ]),
@@ -28516,27 +28809,6 @@ var staticRenderFns = [
           type: "button",
           "data-bs-dismiss": "modal",
           "aria-label": "Close",
-        },
-      }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mb-3" }, [
-      _c("label", { staticClass: "form-label", attrs: { for: "title" } }, [
-        _vm._v("Title"),
-      ]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          name: "title",
-          type: "text",
-          id: "title",
-          autocomplete: "off",
-          required: "",
         },
       }),
     ])
@@ -28602,48 +28874,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mb-3" }, [
-      _c("label", { staticClass: "form-label", attrs: { for: "title" } }, [
-        _vm._v("Title"),
-      ]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          name: "title",
-          type: "text",
-          id: "title",
-          autocomplete: "off",
-          required: "",
-        },
-      }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mb-3" }, [
-      _c("label", { staticClass: "form-label", attrs: { for: "link" } }, [
-        _vm._v("Link"),
-      ]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          name: "link",
-          type: "text",
-          id: "link",
-          autocomplete: "off",
-          required: "",
-        },
-      }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "mb-3 form-check" }, [
       _c("input", {
         staticClass: "form-check-input",
@@ -28696,63 +28926,6 @@ var staticRenderFns = [
           "data-bs-dismiss": "modal",
           "aria-label": "Close",
         },
-      }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mb-3" }, [
-      _c("label", { staticClass: "form-label", attrs: { for: "title" } }, [
-        _vm._v("Title"),
-      ]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          name: "title",
-          type: "text",
-          id: "title",
-          autocomplete: "off",
-          required: "",
-        },
-      }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mb-3" }, [
-      _c(
-        "label",
-        { staticClass: "form-label", attrs: { for: "descreption" } },
-        [_vm._v("Descreption")]
-      ),
-      _vm._v(" "),
-      _c("textarea", {
-        staticClass: "form-control",
-        attrs: {
-          name: "descreption",
-          "aria-label": "With textarea",
-          required: "",
-        },
-      }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mb-3" }, [
-      _c("label", { staticClass: "form-label", attrs: { for: "snippet" } }, [
-        _vm._v("HTML Snippet"),
-      ]),
-      _vm._v(" "),
-      _c("textarea", {
-        staticClass: "form-control",
-        attrs: { name: "snippet", "aria-label": "With textarea", required: "" },
       }),
     ])
   },

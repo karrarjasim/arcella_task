@@ -15,11 +15,14 @@ class FileController extends Controller
             $file = $request->file('file');
         $file_path = 'uploads/'.$file->hashName();
         $file->move(public_path('uploads'), $file_path);
-        $save = File::create([
+        $pdfFile = File::updateOrCreate(
+            [
+                'title' => $request->title,
+            ],[
             'title' => $request->title,
             'link' => $file_path
         ]);
-        $save->resources()->create();
+        $pdfFile->resources()->updateOrCreate(['resourceable_id' => $pdfFile->id]);
 
         return back();
         } catch (\Throwable $th) {

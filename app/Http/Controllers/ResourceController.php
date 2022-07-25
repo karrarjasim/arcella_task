@@ -13,6 +13,11 @@ class ResourceController extends Controller
         return response()->json($resources);
     }
 
+    public function show($id){
+        $resource = Resource::find($id);
+        return  response()->json($resource->resourceable);
+    }
+
     public function destroy(Resource $resource)
     {
         $resource->delete();

@@ -17,7 +17,7 @@ class FileRequest extends FormRequest
     {
         return [
             'title' => 'required',
-            'file' => 'required|file|mimes:pdf'
+            'file' => 'required_if:exists:resources,id|file|mimes:pdf'
         ];
     }
 }

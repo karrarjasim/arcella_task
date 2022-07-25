@@ -30,16 +30,18 @@
                             <td>{{ resource.resourceable.title }}</td>
                             <td>{{ getTypeNameFromClass(resource.resourceable_type) }}</td>
                             <td>
-                                <button class="btn btn-secondary btn-sm">Edit</button>
-                                <button class="btn btn-danger btn-sm" type="button" @click="deleteResources(resource.id)">delete</button>
+                                <button class="btn btn-secondary btn-sm"
+                                    @click="getResource(resource.id, getTypeNameFromClass(resource.resourceable_type))">Edit</button>
+                                <button class="btn btn-danger btn-sm" type="button"
+                                    @click="deleteResources(resource.id)">delete</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-       
-    <add-modals></add-modals>
+
+        <add-modals :form="resource"></add-modals>
     </div>
 
 
@@ -49,9 +51,12 @@
 import AddModalComponent from "./modals/AddModalComponent.vue";
 
 export default {
+
+
     data: function () {
         return {
-            resources: [],
+            resources: {},
+            resource: {}
         };
     },
     created() {
@@ -61,8 +66,32 @@ export default {
         this.getResources();
     },
     methods: {
-        async getResources() {
-            await axios.get("/api/resources").then(response => {
+
+        async getResource(id, modalType) {
+            await axios.get("/api/resources/" + id).then(response => {
+                this.resource = response.data;
+                switch (modalType) {
+                    case "File":
+                        this.showModal('#exampleModal')
+                        break;
+                        case "Link":
+                        this.showModal('#linkModal')
+                        break;
+                        case "Snippet":
+                        this.showModal('#snippetModal')
+                        break;
+
+                    default:
+                        break;
+                }
+            }).catch(error => {
+                console.log(error);
+                this.resource = {};
+            });
+        },
+
+        async getResources(page =1 ) {
+            await axios.get("/api/resources?page="+page).then(response => {
                 this.resources = response.data;
             }).catch(error => {
                 console.log(error);
@@ -82,6 +111,10 @@ export default {
             var rest = classString.substring(0, classString.lastIndexOf("\\") + 1);
             var last = classString.substring(classString.lastIndexOf("\\") + 1, classString.length);
             return last;
+        },
+
+        showModal(id) {
+            new bootstrap.Modal(id).show()
         }
     },
     components: { AddModalComponent }

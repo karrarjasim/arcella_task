@@ -13,12 +13,12 @@
                             <input type="hidden" name="_token" :value="csrfToken" />
                             <div class="mb-3">
                                 <label for="title" class="form-label">Title</label>
-                                <input name="title" type="text" class="form-control" id="title" autocomplete="off"
+                                <input name="title" v-model="form.title" type="text" class="form-control" id="title" autocomplete="off"
                                     required>
                             </div>
                             <div class="mb-3">
                                 <label for="file" class="form-label">File</label>
-                                <input name="file" type="file" class="form-control" id="file" required>
+                                <input name="file"  type="file" class="form-control" id="file" required>
                             </div>
 
                         </div>
@@ -44,12 +44,12 @@
                             <input type="hidden" name="_token" :value="csrfToken" />
                             <div class="mb-3">
                                 <label for="title" class="form-label">Title</label>
-                                <input name="title" type="text" class="form-control" id="title" autocomplete="off"
+                                <input name="title" v-model="form.title" type="text" class="form-control" id="title" autocomplete="off"
                                     required>
                             </div>
                             <div class="mb-3">
                                 <label for="link" class="form-label">Link</label>
-                                <input name="link" type="text" class="form-control" id="link" autocomplete="off"
+                                <input name="link" v-model="form.link" type="text" class="form-control" id="link" autocomplete="off"
                                     required>
                             </div>
                             <div class="mb-3 form-check">
@@ -80,17 +80,17 @@
                             <input type="hidden" name="_token" :value="csrfToken" />
                             <div class="mb-3">
                                 <label for="title" class="form-label">Title</label>
-                                <input name="title" type="text" class="form-control" id="title" autocomplete="off"
+                                <input name="title" v-model="form.title" type="text" class="form-control" id="title" autocomplete="off"
                                     required>
                             </div>
                             <div class="mb-3">
                                 <label for="descreption" class="form-label">Descreption</label>
-                                <textarea name="descreption" class="form-control" aria-label="With textarea"
+                                <textarea name="descreption" v-model="form.descreption" class="form-control" aria-label="With textarea"
                                     required></textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="snippet" class="form-label">HTML Snippet</label>
-                                <textarea name="snippet" class="form-control" aria-label="With textarea"
+                                <textarea v-model="form.snippet" name="snippet" class="form-control" aria-label="With textarea"
                                     required></textarea>
                             </div>
 
@@ -109,10 +109,24 @@
 <script>
 
 export default {
+    data () {
+        return {
+            isUpdate: true
+        }
+    },
+   props: {
+    form: {},
    
+   },
     created() {
         this.csrfToken = document.querySelector("meta[name=\"csrf-token\"]").content;
     },
+    watch: { 
+      	form: function(newVal, oldVal) { // watch it
+          this.isUpdate= false
+          
+        }
+      }
    
 }
 </script>

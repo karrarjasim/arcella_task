@@ -11,11 +11,18 @@ class LinkController extends Controller
 {
     public function store(LinkRequest $request) 
     {
-         Link::create([
+
+        $link =  Link::updateOrCreate(
+            [
+                'title' => $request->title,
+            ],
+            [
             'title' => $request->title,
             'link' => $request->link,
             'new_tab' => (Boolean) $request->new_tab == "on" ? true: false
-        ])->resources()->create();
+            ]);
+
+        $link->resources()->updateOrCreate(['resourceable_id' => $link->id]);
 
         return back();
     }
