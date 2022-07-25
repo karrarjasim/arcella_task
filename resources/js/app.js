@@ -19,7 +19,7 @@ import axios from 'axios';
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('home-component', require('./components/HomeComponent.vue').default);
 Vue.component('add-modals', require('./components/modals/AddModalComponent.vue').default);
 
 /**
@@ -31,3 +31,24 @@ Vue.component('add-modals', require('./components/modals/AddModalComponent.vue')
 const app = new Vue({
     el: '#app',
 });
+
+
+
+var btns = document.getElementsByClassName("snippet");
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener('click', function () {
+            navigator.clipboard.writeText(this.textContent).then(
+                function () {
+                    alert("Copying to clipboard was successful!");
+                },
+                function (err) {
+                    alert("Could not copy text: ", err);
+                }
+            );
+            
+        })
+    }
+
+
+    
+

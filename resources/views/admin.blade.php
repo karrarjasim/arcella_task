@@ -10,6 +10,6 @@
         </ul>
       </div><br />
 @endif
-        <example-component></example-component>
+        <home-component></home-component>
 
 @endsection

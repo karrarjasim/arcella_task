@@ -6,4 +6,7 @@
       <p class="card-text">{{ $description }}</p>
       <p class="bd-code-snippet">{{ $snippet }}</p>
     </div>
+    <div class="card-footer">
+      <button class="snippet">copy</button>
+    </div>
 </div>
